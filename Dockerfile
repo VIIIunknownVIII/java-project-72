@@ -1,11 +1,22 @@
-# Базовый образ для сборки
+# Используем официальный образ с JDK 17 и Gradle для сборки
 FROM gradle:8.8-jdk17 AS build
-WORKDIR /app
-COPY . .
-RUN gradle installDist
 
-# Базовый образ для запуска
-FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /app/build/install/app /app/
-ENTRYPOINT ["/app/bin/app"]
+
+COPY ./app/build.gradle ./app/settings.gradle /app/
+
+RUN gradle clean build --no-daemon || true
+
+COPY ./app /app
+
+RUN gradle build --no-daemon --info
+
+
+
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/*.jar /app/app.jar
+
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

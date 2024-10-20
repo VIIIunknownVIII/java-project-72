@@ -89,7 +89,7 @@ public class AppTest {
             var response = client.post("/urls", requestBody);
             assertThat(response.code()).isEqualTo(200);
 
-            Url url = UrlRepository.getEntities().getFirst();
+            Url url = UrlRepository.getEntities().get(0);
             assertThat(url.getName()).isEqualTo("https://www.example1.com");
         });
     }
@@ -128,7 +128,7 @@ public class AppTest {
             List<UrlCheck> urlChecks = UrlChecksRepository.getAllChecksForUrl(mockUrl.getId());
             assertThat(urlChecks.size()).isEqualTo(1);
 
-            UrlCheck lastUrlCheck = UrlChecksRepository.getAllChecksForUrl(mockUrl.getId()).getFirst();
+            UrlCheck lastUrlCheck = UrlChecksRepository.getAllChecksForUrl(mockUrl.getId()).get(0);
             assertThat(lastUrlCheck.getUrlId()).isEqualTo(1);
             assertThat(lastUrlCheck.getStatusCode()).isEqualTo(200);
             assertThat(lastUrlCheck.getCreatedAt()).isToday();
