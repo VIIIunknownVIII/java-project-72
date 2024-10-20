@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY app /app
 
-RUN gradle installDist --no-daemon
+RUN gradle installDist --no-daemon --info
 
 FROM openjdk:21-slim
 
