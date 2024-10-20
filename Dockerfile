@@ -1,9 +1,11 @@
-FROM gradle:8.5.0-jdk21
-
+# Базовый образ для сборки
+FROM gradle:8.8-jdk17 AS build
 WORKDIR /app
-
-COPY /app .
-
+COPY . .
 RUN gradle installDist
 
-CMD ./build/install/app/bin/app
+# Базовый образ для запуска
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/build/install/app /app/
+ENTRYPOINT ["/app/bin/app"]
