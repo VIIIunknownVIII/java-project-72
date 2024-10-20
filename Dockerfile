@@ -12,7 +12,6 @@ COPY ./app /app
 RUN gradle build --no-daemon --info
 
 
-
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
