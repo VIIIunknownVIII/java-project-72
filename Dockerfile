@@ -1,9 +1,15 @@
-FROM gradle:8.5.0-jdk21
+FROM gradle:8.5.0-jdk21 AS build
 
 WORKDIR /app
 
-COPY /app .
+COPY app /app
 
-RUN gradle installDist
+RUN gradle installDist --no-daemon
 
-CMD ./build/install/app/bin/app
+FROM openjdk:21-slim
+
+WORKDIR /app
+
+COPY --from=build /app/build/install/app /app
+
+CMD ["./bin/app"]
