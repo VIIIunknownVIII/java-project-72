@@ -12,6 +12,7 @@ FROM openjdk:21-slim
 
 WORKDIR /app
 
+
 COPY --from=build /app/build/install/app /app
 
 # Указываем команду для запуска приложения
