@@ -1,19 +1,9 @@
-FROM gradle:8.8-jdk17 AS build
+FROM gradle:8.5.0-jdk21
 
 WORKDIR /app
 
-COPY ./app/build.gradle ./app/settings.gradle /app/
+COPY /app .
 
-RUN gradle clean build --no-daemon || true
+RUN gradle installDist
 
-COPY ./app /app
-
-RUN gradle build --no-daemon
-
-FROM openjdk:17-jdk-slim
-
-WORKDIR /app
-
-COPY --from=build /app/build/libs/*.jar /app/app.jar
-
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+CMD ./build/install/app/bin/app
